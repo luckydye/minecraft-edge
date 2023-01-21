@@ -9,4 +9,6 @@ WORKDIR /data
 
 RUN touch eula.txt && echo "eula=${EULA}" > eula.txt
 
+RUN chmod 777 ./startup.sh
+
 ENTRYPOINT [ "./startup.sh" ]
