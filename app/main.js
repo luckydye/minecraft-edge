@@ -28,7 +28,7 @@ function startServer() {
       }
     );
 
-    server.stdin.pipe(process.stdin);
+    process.stdin.pipe(server.stdin);
     server.stdout.pipe(process.stdout);
     server.stderr.pipe(process.stderr);
 
@@ -105,7 +105,7 @@ function createServer() {
     }
 
     setTimeout(() => {
-      proxy.setRemoteServer(player.id, "main");
+      if (!player.ended) proxy.setRemoteServer(player.id, "main");
     }, 200);
   });
 
