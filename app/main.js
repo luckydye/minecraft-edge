@@ -51,15 +51,24 @@ function checkIdleStatus() {
     server.stdin.end();
     server = null;
   }
-
-  setTimeout(() => {
-    checkIdleStatus();
-  }, 1000 * 60);
 }
 
 function playerHasAccess(player) {
   const list = JSON.parse(fs.readFileSync("./data/whitelist.json").toString());
   return !!list.find((p) => p.name === player.username);
+}
+
+function onPlayerConnect(player) {
+  players.add(player);
+}
+
+function onPlayerDisconnect(player) {
+  console.info(`${player.username} disconnected: ${player.socket.remoteAddress}`);
+  players.delete(player);
+
+  setTimeout(() => {
+    checkIdleStatus();
+  }, 1000 * 60 * 5);
 }
 
 function createServer() {
@@ -75,11 +84,10 @@ function createServer() {
       return;
     }
 
-    players.add(player);
+    onPlayerConnect(player);
 
     player.on("end", () => {
-      console.info(`${player.username} disconnected: ${player.socket.remoteAddress}`);
-      players.delete(player);
+      onPlayerDisconnect(player);
     });
 
     player.on("error", (err) => {
@@ -87,7 +95,8 @@ function createServer() {
         `${player.username} disconnected with error: ${player.socket.remoteAddress}`,
         err
       );
-      players.delete(player);
+
+      onPlayerDisconnect(player);
     });
 
     if (!server) {
