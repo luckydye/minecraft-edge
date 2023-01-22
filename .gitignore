@@ -1,1 +1,6 @@
 # ignore
+node_modules
+data/saves/world
+data/saves/world_nether
+data/saves/world_the_end
+data/saves/usercache.json

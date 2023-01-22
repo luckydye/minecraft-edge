@@ -1,0 +1,25 @@
+{
+  "name": "minecraft-edge",
+  "version": "1.0.0",
+  "description": "` docker run -v $(pwd)/saves:/data/saves sha256:689c1d8a0e8d02c9c1be99d0144236016a693cd929a7132eea3fde550a0a2061 `",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckydye/minecraft-edge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luckydye/minecraft-edge/issues"
+  },
+  "homepage": "https://github.com/luckydye/minecraft-edge#readme",
+  "dependencies": {
+    "basic-minecraft-proxy": "^2.0.1",
+    "minecraft-data": "^3.25.2",
+    "minecraft-protocol": "^1.40.0",
+    "node-rsa": "^1.1.1"
+  }
+}

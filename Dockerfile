@@ -1,14 +1,21 @@
-FROM openjdk:19
+FROM openjdk:19-buster
 
+ENV MINECRAFT_VERSION=1.19.3
 ENV PORT=25565
-ENV EULA=true
 
-ADD ./data /data
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -  &&\
+  apt update -y &&\ 
+  apt install nodejs -y 
 
-WORKDIR /data
+ADD . /app
 
-RUN touch eula.txt && echo "eula=${EULA}" > eula.txt
+WORKDIR /app/data
 
-RUN chmod 777 ./startup.sh
+RUN curl https://download.getbukkit.org/spigot/spigot-${MINECRAFT_VERSION}.jar -o spigot.jar
 
-ENTRYPOINT [ "bash", "./startup.sh" ]
+WORKDIR /app
+
+RUN npm i 
+RUN chmod -R 770 .
+
+ENTRYPOINT [ "node", "app/main.js" ]
