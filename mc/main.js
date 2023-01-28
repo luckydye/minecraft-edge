@@ -1,7 +1,7 @@
-const McProxy = require("./proxy/createProxy.js");
-const { spawn } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+import { createProxy } from "./proxy/createProxy.js";
+import { spawn } from "child_process";
+import fs from "fs";
+import path from "path";
 
 let localServerOptions = {
   port: "25565",
@@ -72,7 +72,7 @@ function onPlayerDisconnect(player) {
 }
 
 function createServer() {
-  let proxy = McProxy.createProxy(localServerOptions, serverList, {
+  let proxy = createProxy(localServerOptions, serverList, {
     autoConnect: false,
     autoFallback: false,
   });
@@ -129,5 +129,9 @@ function start() {
   }
 }
 
-start();
-checkIdleStatus();
+export default {
+  start() {
+    start();
+    checkIdleStatus();
+  },
+};

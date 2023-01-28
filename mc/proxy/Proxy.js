@@ -1,7 +1,7 @@
-const mc = require("minecraft-protocol");
+import mc from "minecraft-protocol";
 
-const replayPackets = require("basic-minecraft-proxy/src/Proxy/packetReplayer");
-const addListeners = require("basic-minecraft-proxy/src/Proxy/addListeners");
+import replayPackets from "basic-minecraft-proxy/src/Proxy/packetReplayer";
+import addListeners from "basic-minecraft-proxy/src/Proxy/addListeners";
 
 class Proxy extends mc.Server {
   /**
@@ -124,4 +124,4 @@ class Proxy extends mc.Server {
   }
 }
 
-module.exports = Proxy;
+export default Proxy;

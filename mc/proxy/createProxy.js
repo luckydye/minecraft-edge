@@ -1,19 +1,31 @@
 // https://github.com/darcros/node-minecraft-proxy
 
-const NodeRSA = require("node-rsa");
-const path = require("path");
+import NodeRSA from "node-rsa";
 
-const Proxy = require("./Proxy.js");
-const minecraftData = require("minecraft-data");
+import Proxy from "./Proxy.js";
+import minecraftData from "minecraft-data";
 
-const mcProtocolPath = require.resolve("minecraft-protocol");
-const localServerPlugins = [
-  require(path.join(mcProtocolPath, "../server/handshake")),
-  require(path.join(mcProtocolPath, "../server/login")),
-  require(path.join(mcProtocolPath, "../server/ping")),
+const localServerPlugins = [];
+
+const proxyPlugins = [
+  function handleCommands(client, proxy, localServerOptions, proxyOptions) {
+    client.on("chat", (data, metadata) => {
+      let split = data.message.split(" ");
+      if (split[0] === "/server") {
+        if (proxy.serverList[split[1]]) {
+          proxy.setRemoteServer(client.id, split[1]);
+        } else {
+          const msg = {
+            color: "red",
+            translate: "commands.generic.selector_argument",
+            with: [split[1]],
+          };
+          client.write("chat", { message: JSON.stringify(msg), position: 0 });
+        }
+      }
+    });
+  },
 ];
-
-const proxyPlugins = [require("../plugins/chat-commands.js")];
 
 /**
  * Create a new proxy
@@ -21,7 +33,7 @@ const proxyPlugins = [require("../plugins/chat-commands.js")];
  * @param {Object} serverList An object that maps a 'serverName' to the server info
  * @returns {MinecraftProxy} A new Minecraft proxy
  */
-function createProxy(localServerOptions = {}, serverList = {}, proxyOptions = {}) {
+export function createProxy(localServerOptions = {}, serverList = {}, proxyOptions = {}) {
   const {
     host = "0.0.0.0",
     "server-port": serverPort,
@@ -61,7 +73,3 @@ function createProxy(localServerOptions = {}, serverList = {}, proxyOptions = {}
   proxy.listen(port, host);
   return proxy;
 }
-
-module.exports = {
-  createProxy,
-};
