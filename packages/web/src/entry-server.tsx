@@ -1,6 +1,6 @@
 import { StartServer, createHandler, renderAsync } from "solid-start/entry-server";
 
-import mc from "../../mc/main.js";
+import mc from "minecraft";
 
 mc.start();
 
